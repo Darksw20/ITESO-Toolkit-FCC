@@ -5,45 +5,8 @@ import {
 import { Send } from '@material-ui/icons';
 import './App.css';
 import { teal } from '@material-ui/core/colors';
-import Axios from 'axios';
 import useDiagram from './useDiagram';
-
-
-const dummy = {
-  hasReflexivity: true,
-  hasSimetry: true,
-  hasTransitivity: false,
-  domain: [
-    '0',
-    '1',
-    '2',
-    '3',
-  ],
-  codomain: [
-    '0',
-    '1',
-    '2',
-    '3',
-  ],
-  isFunction: true,
-  entitys: [
-    { key: '0', color: 'lightblue' },
-    { key: '1', color: 'orange' },
-    { key: '2', color: 'lightgreen' },
-    { key: '3', color: 'pink' },
-  ],
-  relations: [
-    { from: '0', to: '0' },
-    { from: '0', to: '1' },
-    { from: '0', to: '3' },
-    { from: '1', to: '0' },
-    { from: '1', to: '1' },
-    { from: '2', to: '2' },
-    { from: '3', to: '0' },
-    { from: '3', to: '3' },
-  ],
-  status: 200,
-};
+import determ from './determ';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -84,24 +47,11 @@ function App() {
     error: false,
     success: false,
   });
-  const graph = useDiagram({ entitys: [], relations: [] });
-
-  Axios({
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    url: 'localhost:3001/webService/Determ',
-    method: 'POST',
-    data: {
-      postParams: {
-        relation: '(1,0),(0,1),(0,3),(1,0),(1,1),(2,2),(3,0),(3,3)',
-      },
-    },
+  let api = determ({
+    relation: '(1,0),(0,1),(0,3),(1,0),(1,1),(2,2),(3,0),(3,3)',
   })
-    .then((res) => {
-      console.log(res);
-    });
-
+  const graph = useDiagram({ entitys: api.entitys, relations: api.relations });
+  
   return (
     <ThemeProvider theme={theme}>
       <Container className={classes.container}>
