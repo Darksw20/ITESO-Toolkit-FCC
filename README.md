@@ -1,3 +1,21 @@
+Para instalar este programa es necesario tener:
+    
+    -Node 12.16.2
+
+El comando para instalar los paquetes es:
+
+    npm install
+
+El comando para correr el programa es:
+
+    npm start
+
+El programa se podrá ver en el navegador en la url:
+
+    http://localhost:3000
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
