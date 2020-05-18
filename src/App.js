@@ -13,8 +13,9 @@ import './App.css';
 import { teal } from '@material-ui/core/colors';
 import useDiagram from './useDiagram';
 import relations from './back/relations';
-//import combination from './back/permutation';
-//import permutation from './back/combination';
+import combination from './back/combination';
+import permutation from './back/permutation';
+import recursion from './back/recursion';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -84,6 +85,7 @@ const theme = createMuiTheme({
 });
 
 
+
 function App() {
   const classes = useStyles();
 
@@ -91,20 +93,39 @@ function App() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [text, setText] = useState('')
+  const [relInp, setText] = useState('')
   let rel = relations({
-    relation: text,
-  })
-  /*
+    relation: relInp,
+  });
+
+  const [combInp1, setCombInp1] = useState('')
+  const [combInp2, setCombInp2] = useState('')
   let comb = combination({
-    Poblation: "8",
-    Sample: "3"
-  })
+    Poblation: combInp1,
+    Sample: combInp2
+  });
+
+  const [perInp1, setPerInp1] = useState('');
+  const [perInp2, setPerInp2] = useState('');
+  const [perInp3, setPerInp3] = useState('');
+
   let per = permutation({
-    Poblation: "8",
-    Sample: "3"
+    Poblation: perInp1,
+    Sample: perInp2,
+    Word: perInp3,
   })
-  */
+
+  const [recInp1, setRecInp1] = useState('');
+  const [recInp2, setRecInp2] = useState('');
+  const [recInp3, setRecInp3] = useState('');
+
+  let rec = recursion({
+    inf: "1",
+    sup: "5",
+    form: "1/k^2"
+  })
+  console.log(rec)
+
   const graph = useDiagram({ entitys: rel.entitys, relations: rel.relations });
 
   return (
@@ -120,7 +141,7 @@ function App() {
           <Tab label="Relaciones" {...a11yProps(0)} />
           <Tab label="Sucesiones" {...a11yProps(1)} />
           <Tab label="Permutaciones" {...a11yProps(2)} />
-          <Tab label="Combianciones" {...a11yProps(3)} />
+          <Tab label="Combinaciones" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -144,19 +165,16 @@ function App() {
               />
               <br />
               <Box style={{ width: '100%', height: 300 }} ref={graph} />
+              <Box style={{ width: '100%', height: 300 }} >
+                <h3 style={{ color: 'white' }}>Reflexividad: {rel.hasReflexivity}</h3>
+                <h3 style={{ color: 'white' }}>Simetria: {rel.hasSimetry}</h3>
+                <h3 style={{ color: 'white' }}>Transitividad: {rel.hasTransitivity}</h3>
+                <h3 style={{ color: 'white' }}>Es una función: {rel.isFunction}</h3>
+                <h3 style={{ color: 'white' }}>Dominio X=[ {rel.domain + ','} ]</h3>
+                <h3 style={{ color: 'white' }}>Codominio Y=[ {rel.codomain + ','}]</h3>  
+              </Box> 
             </Paper>
 
-          </Container>
-          <Container className={classes.container}>
-            <Paper className={classes.paper} >
-              <h3 style={{ color: 'white' }}>Reflexividad: {rel.hasReflexivity}</h3>
-              <h3 style={{ color: 'white' }}>Simetria: {rel.hasSimetry}</h3>
-              <h3 style={{ color: 'white' }}>Transitividad: {rel.hasTransitivity}</h3>
-              <h3 style={{ color: 'white' }}>Es una función: {rel.isFunction}</h3>
-              <h3 style={{ color: 'white' }}>Dominio X=[ {rel.domain + ','} ]</h3>
-              <h3 style={{ color: 'white' }}>Codominio Y=[ {rel.codomain + ','}]</h3>
-
-            </Paper>
           </Container>
         </ThemeProvider>
       </TabPanel>
@@ -166,17 +184,20 @@ function App() {
             <Paper className={classes.paper} elevation={5}>
               <TextField
                 fullWidth
-                onChange={e => setText(e.target.value)}
+                defaultValue="0"
+                onChange={e => setRecInp1(e.target.value)}
                 InputProps={{ startAdornment: 'Límite inferior: ' }}
               />
               <TextField
                 fullWidth
-                onChange={e => setText(e.target.value)}
+                defaultValue="0"
+                onChange={e => setRecInp2(e.target.value)}
                 InputProps={{ startAdornment: 'Límite superior: ' }}
               />
               <TextField
                 fullWidth
-                onChange={e => setText(e.target.value)}
+                defaultValue="0"
+                onChange={e => setRecInp3(e.target.value)}
                 InputProps={{ startAdornment: 'Formula explicita: ' }}
               />
               <br />
@@ -193,26 +214,37 @@ function App() {
             <Paper className={classes.paper} elevation={5}>
               <TextField
                 fullWidth
-                onChange={e => setText(e.target.value)}
+                min="1"
+                defaultValue="1"
+                onChange={e => setPerInp1(e.target.value)}
                 InputProps={{ startAdornment: 'N: ' }}
               />
               <TextField
                 fullWidth
-                onChange={e => setText(e.target.value)}
+                defaultValue="1"
+                min="1"
+                onChange={e => setPerInp2(e.target.value)}
                 InputProps={{ startAdornment: 'R: ' }}
               />
               <TextField
                 fullWidth
-                onChange={e => setText(e.target.value)}
+                onChange={e => setPerInp3(e.target.value)}
                 InputProps={{ startAdornment: 'Palabras: ' }}
               />
-              <TextField
-                fullWidth
-                onChange={e => setText(e.target.value)}
-                InputProps={{ startAdornment: 'Letras: ' }}
-              />
               <br />
-              <Box style={{ width: '100%', height: 300 }} ref={graph} />
+              <Box style={{ width: '100%' }}>
+                <h3 style={{ color: 'white' }}>Con todos los elementos (r=n) : P(n,n) = {per.allElements.formula} = {per.allElements.res}</h3>
+                <h3 style={{ color: 'white' }}>De un subconjunto r, (r=n): P(n,r)= n!/(n-r)! = {per.subElements.formula} = {per.subElements.res}</h3>
+                <h3 style={{ color: 'white' }}>Permutaciones cíclicas para n: Pc=(n-1)! = {per.cyclic.formula} = {per.cyclic.res}</h3>
+                <h3 style={{ color: 'white' }}>Permutaciones con elementos repetidos (r > n): Pr=n!/(n1!n2!...nk!) = {per.repeated.formula} = {per.repeated.res}</h3>  
+                <h3 style={{ color: 'white' }}>Elementos repetidos:</h3>  
+                
+                { per.repeated.hash != undefined &&
+                  
+                    per.repeated.hash.map(({letter,times})=><div><h3 style={{ color: 'white' }}>La letra {letter} se repitio {times} veces</h3>  </div>)
+                  
+                }
+              </Box>  
             </Paper>
 
           </Container>
@@ -225,19 +257,23 @@ function App() {
             <Paper className={classes.paper} elevation={5}>
               <TextField
                 fullWidth
-                onChange={e => setText(e.target.value)}
+                defaultValue="0"
+                onChange={e => setCombInp1(e.target.value)}
                 InputProps={{ startAdornment: 'N: ' }}
               />
               <TextField
                 fullWidth
-                onChange={e => setText(e.target.value)}
+                onChange={e => setCombInp2(e.target.value)}
                 InputProps={{ startAdornment: 'R: ' }}
               />
-              <Box style={{ width: '100%', height: 300 }} ref={graph} />
+              <Box style={{ width: '100%', height: 300 }} ref={graph} >
+                <h3 style={{ color: 'white' }}>C(n,r) ↔ (n/r): {comb.case1.formula} = {comb.case1.res}</h3>
+                <h3 style={{ color: 'white' }}>Para reducir el trabajo computacional: {comb.case2.formula} = {comb.case2.res}</h3>
+                <h3 style={{ color: 'white' }}>Equivalente C(n,r) = C(n, n-r): {comb.case3.formula} = {comb.case3.formula2}</h3>
+              </Box>
             </Paper>
 
           </Container>
-
         </ThemeProvider>
       </TabPanel>
     </div>
