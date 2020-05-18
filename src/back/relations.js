@@ -22,7 +22,7 @@ function isFunction(data,entitys){
             }
         })
     })
-    let isFun = counter === entitys.length ? true : false;
+    let isFun = counter === entitys.length ?  "Si" : "No";
     return isFun
 }
 function reflex(data,entitys){
@@ -32,7 +32,7 @@ function reflex(data,entitys){
             counter++;
         }
     })
-    let hasRef = entitys.length === counter ? true : false; 
+    let hasRef = entitys.length === counter ? "Si" : "No"; 
     return hasRef
 }
 function simetry(data,relations){
@@ -44,9 +44,10 @@ function simetry(data,relations){
             }
         })
     })
-    let hasSimetry = relations.length === counter ? true : false;
+    let hasSimetry = relations.length === counter ?  "Si" : "No";
     return hasSimetry
 }
+/*
 function biyectiva(){
 
 }
@@ -56,14 +57,27 @@ function sobreyectiva(){
 function inyectiva(){
     
 }
-
+*/
 function trans(data){
-    return new Promise(function(resolve,reject){
-        data.forEach(XY=>{
-            
+    var res="Si"
+    data.forEach((first)=>{
+        data.forEach((sec)=>{
+            if((first.to === sec.from)&& !check(data,first.from,sec.to)){
+                //console.log("("+first.to+"==="+sec.from+") but not ("+first.from+","+sec.to+")")
+                res="No"
+            }
         })
-        return resolve(true)
-    }).catch(e=>console.error("trans "+e))
+    })
+    return res
+}
+function check(data,from, to){
+    var found = false;
+    data.forEach(element=>{
+        if(element.from === from && element.to === to){
+            found = true;
+        }
+    })
+    return found
 }
 function parseData(data){
     var datas = []
@@ -117,3 +131,13 @@ function entitys(data){
     })
     return entitys
 }
+// -------------------------------------
+// Combinaciones
+// ------------------------------------
+
+
+
+// ------------------------------------
+// Permutaciones
+// -----------------------------------
+
